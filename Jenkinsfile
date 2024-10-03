@@ -15,6 +15,16 @@ pipeline {
             }
         }
 
+        stage('Cleanup Docker Images') {
+            steps {
+                script {
+                    // Remove dangling and oldimages
+                    sh 'docker image prune -f'
+                    sh 'docker rmi $(docker images -q --filter "before=dns-resolver:latest") || true'
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t dns-resolver .'
