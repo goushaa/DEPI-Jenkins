@@ -28,18 +28,22 @@ pipeline {
             }
         }
 
-        stage('Login to ECR') {
+       stage('Login to ECR') {
             steps {
                 script {
                     // Login to AWS ECR
-                    def ecrCredentials = withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-ecr-credentials']]) {
-                        sh '''
-                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${DOCKER_IMAGE}
-                        '''
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-ecr-credentials']]) {
+                        // Use a variable for your ECR repository URI
+                        def ecrUri = "${DOCKER_IMAGE}" // Make sure DOCKER_IMAGE is correctly set to your ECR URI
+                        sh """
+                        #!/bin/bash
+                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ecrUri}
+                        """
                     }
                 }
             }
         }
+
 
         stage('Tag & Push to ECR') {
             steps {
