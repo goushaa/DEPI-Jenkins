@@ -36,20 +36,11 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    // Deploy to Kubernetes using the specified config file
-                    sh "kubectl apply -f k8s-deployment.yaml --kubeconfig=$KUBECONFIG"
-                }
-            }
-        }
     }
 
     post {
         success {
-            echo 'Deployment Successful!'
+            echo 'Image pushed to ECR successfully!'
         }
         failure {
             echo 'Build failed.'
