@@ -21,18 +21,36 @@ pipeline {
             }
         }
 
+        stage('Debug Docker Images') {
+            steps {
+                // Debugging step to list Docker images
+                sh 'docker images'
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                script {
+                    // Login to AWS ECR
+                    def ecrCredentials = withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-ecr-credentials']]) {
+                        sh '''
+                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${DOCKER_IMAGE}
+                        '''
+                    }
+                }
+            }
+        }
+
         stage('Tag & Push to ECR') {
             steps {
                 script {
-                    docker.withRegistry("https://522814709442.dkr.ecr.us-east-1.amazonaws.com", 'aws-ecr-credentials') {
-                        // Tag the image with the build number
-                        sh "docker tag dns-resolver:latest ${DOCKER_IMAGE}:${BUILD_NUMBER}"
-                        // Tag the image as latest, overwriting the previous one
-                        sh "docker tag dns-resolver:latest ${DOCKER_IMAGE}:latest"
-                        // Push both tags to ECR
-                        sh "docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}"
-                        sh "docker push ${DOCKER_IMAGE}:latest"
-                    }
+                    // Tag the image with the build number
+                    sh "docker tag dns-resolver:latest ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                    // Tag the image as latest, overwriting the previous one
+                    sh "docker tag dns-resolver:latest ${DOCKER_IMAGE}:latest"
+                    // Push both tags to ECR
+                    sh "docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                    sh "docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }
