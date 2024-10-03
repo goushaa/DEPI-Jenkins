@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/your-python-app-repo.git', branch: 'main'
+                git url: 'https://github.com/goushaa/DEPI-Code.git', branch: 'main'
             }
         }
 
