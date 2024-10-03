@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         AWS_ECR_REPO = 'kady-docker-repo'
-        AWS_REGION = 'your-aws-region'
-        DOCKER_IMAGE = "your-ecr-url/$AWS_ECR_REPO:latest"
+        AWS_REGION = 'us-east-1'
+        DOCKER_IMAGE = "522814709442.dkr.ecr.us-east-1.amazonaws.com/$AWS_ECR_REPO"
         KUBECONFIG = '/path/to/your/kubeconfig'
     }
 
@@ -17,17 +17,21 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("$AWS_ECR_REPO:latest")
-                }
+                sh 'docker build . -t dns-resolver'
             }
         }
 
         stage('Tag & Push to ECR') {
             steps {
                 script {
-                    docker.withRegistry("https://<your-ecr-url>", 'aws-ecr-credentials') {
-                        dockerImage.push("latest")
+                    docker.withRegistry("https://522814709442.dkr.ecr.us-east-1.amazonaws.com", 'aws-ecr-credentials') {
+                        // Tag the image with the build number
+                        sh "docker tag dns-resolver:latest ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                        // Tag the image as latest, overwriting the previous one
+                        sh "docker tag dns-resolver:latest ${DOCKER_IMAGE}:latest"
+                        // Push both tags to ECR
+                        sh "docker push ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
                     }
                 }
             }
@@ -36,6 +40,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                    // Deploy to Kubernetes using the specified config file
                     sh "kubectl apply -f k8s-deployment.yaml --kubeconfig=$KUBECONFIG"
                 }
             }
