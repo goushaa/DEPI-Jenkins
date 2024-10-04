@@ -69,7 +69,7 @@ pipeline {
             steps {
                 script {
                     // Get the public IP of the target EC2 instance by name
-                    def instanceDetails = sh(script: "aws ec2 describe-instances --filters \"Name=tag:Name,Values=${TARGET_INSTANCE_NAME}\" --query \"Reservations[*].Instances[*].[PublicIpAddress]\" --output text --region ${AWS_REGION}", returnStdout: true).trim()
+                    def instanceDetails = sh(script: "aws ec2 describe-instances --filters \"Name=tag:Name,Values=${TARGET_INSTANCE_NAME}\" --query \"Reservations[*].Instances[?PublicIpAddress!=null].[PublicIpAddress]\" --output text --region ${AWS_REGION}", returnStdout: true).trim()
                     env.TARGET_EC2_IP = instanceDetails
 
                     // Get the SSH key path from the Terraform output (you might run terraform output command here if needed)
