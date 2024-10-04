@@ -32,6 +32,7 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
    - Go to the `Available` tab and search for the following plugins:
      - **Amazon ECR**: This plugin enables Jenkins to interact with Amazon Elastic Container Registry (ECR).
      - **Docker Pipeline**: This plugin provides Docker support for Jenkins pipelines.
+     - **GitHub Integration Plugin**: This plugin provides allows using Github Webhooks.
    - Select the plugins and click on the `Install without restart` button.
 
 5. **Add AWS Credentials:**
@@ -49,6 +50,7 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
    - For `SCM`, choose `Git`.
    - Enter the repository URL: `https://github.com/goushaa/DEPI-Jenkins.git`.
    - Set the branch to `*/main`.
+   - Check the option of `GitHub hook trigger for GITScm polling`.
    - Click `Save` to create the job.
 
 ## Jenkinsfile Explanation
