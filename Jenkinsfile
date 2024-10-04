@@ -74,6 +74,8 @@ pipeline {
 
                     // Get the SSH key path from the Terraform output (you might run terraform output command here if needed)
                     env.TARGET_KEY = TARGET_KEY_PATH
+                    
+                    echo "EC2 IP: ${env.TARGET_EC2_IP}"
                     echo "SSH Key Path: ${env.TARGET_KEY}"
                 }
             }
