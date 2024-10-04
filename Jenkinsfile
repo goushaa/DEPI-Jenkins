@@ -84,8 +84,8 @@ pipeline {
         stage('Transfer Deployment File') {
             steps {
                 script {
-                    // SSH to verify connection (this is optional)
-                    sh "ssh -i ${TARGET_KEY} ubuntu@${TARGET_EC2_IP} 'whoami'"
+                    // SSH to verify connection (test)
+                    sh "ssh -o StrictHostKeyChecking=no -i ${TARGET_KEY} ubuntu@${TARGET_EC2_IP} 'whoami'"
 
                     // Transfer the deployment YAML file to the target EC2 instance
                     sh """
