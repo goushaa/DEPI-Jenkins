@@ -87,7 +87,7 @@ pipeline {
                     // SSH to verify connection (test)
                     sh """
                     ssh -o StrictHostKeyChecking=no -i ${TARGET_KEY} ubuntu@${TARGET_EC2_IP} \
-                    'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 522814709442.dkr.ecr.us-east-1.amazonaws.com'
+                    'aws ecr get-login-password --region us-east-1'
                     """
 
                     // Transfer the deployment YAML file to the target EC2 instance
