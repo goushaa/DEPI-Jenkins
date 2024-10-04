@@ -84,7 +84,8 @@ pipeline {
         stage('Transfer Deployment File') {
             steps {
                 script {
-                    sh 'ssh -i /home/ubuntu/k3sPair.pem ubuntu@54.164.120.214 "whoami"'
+                    sh 'ssh -i /var/lib/jenkins/.ssh/k3sPair.pem ubuntu@54.164.120.214 "whoami"'
+
 
                     // Transfer the deployment YAML file to the target EC2 instance
                     sh """
