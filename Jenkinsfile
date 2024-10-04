@@ -6,7 +6,7 @@ pipeline {
         AWS_REGION = 'us-east-1'
         DOCKER_IMAGE = "522814709442.dkr.ecr.us-east-1.amazonaws.com/${AWS_ECR_REPO}"
         TARGET_INSTANCE_NAME = 'k3s'
-        TARGET_KEY_PATH = '/home/ubuntu/k3sPair.pem'
+        TARGET_KEY_PATH = '/var/lib/jenkins/.ssh/k3sPair.pem'
     }
 
     stages {
@@ -84,7 +84,7 @@ pipeline {
         stage('Transfer Deployment File') {
             steps {
                 script {
-                    sh 'ssh -i /var/lib/jenkins/.ssh/k3sPair.pem ubuntu@54.164.120.214 "whoami"'
+                    sh "ssh -i ${TARGET_KEY} ubuntu@${TARGET_EC2_IP} 'whoami'"
 
 
                     // Transfer the deployment YAML file to the target EC2 instance
