@@ -84,6 +84,8 @@ pipeline {
         stage('Transfer Deployment File') {
             steps {
                 script {
+                    sh 'ssh -i /home/ubuntu/k3sPair.pem ubuntu@54.164.120.214 "whoami"'
+
                     // Transfer the deployment YAML file to the target EC2 instance
                     sh """
                     scp -o StrictHostKeyChecking=no -i ${TARGET_KEY} dns_resolver_deployment.yaml ubuntu@${TARGET_EC2_IP}:/home/ubuntu/
