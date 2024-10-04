@@ -80,11 +80,33 @@ pipeline {
                 }
             }
         }
+
+        stage('Transfer Deployment File') {
+            steps {
+                script {
+                    // Transfer the deployment YAML file to the target EC2 instance
+                    sh """
+                    scp -o StrictHostKeyChecking=no -i ${TARGET_KEY} dns_resolver_deployment.yaml ubuntu@${TARGET_EC2_IP}:/home/ubuntu/
+                    """
+                }
+            }
+        }
+
+        stage('Apply Deployment') {
+            steps {
+                script {
+                    // SSH into the target EC2 instance and apply the deployment
+                    sh """
+                    ssh -o StrictHostKeyChecking=no -i ${TARGET_KEY} ubuntu@${TARGET_EC2_IP} "kubectl apply -f /home/ubuntu/dns_resolver_deployment.yaml"
+                    """
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'Image pushed to ECR successfully!'
+            echo 'Image pushed to ECR and deployment applied successfully!'
         }
         failure {
             echo 'Build failed.'
