@@ -4,7 +4,7 @@
 
 Before running the Jenkins pipeline, you need to complete the following manual setup steps on your EC2 instance where Jenkins is hosted:
 
-1. **SSH into the EC2 instance and set up the SSH key:**
+1. **SSH into the `Jenkins` EC2 instance and set up the SSH key:**
 ```bash
 ssh -i /path/to/your/key.pem ubuntu@your-ec2-public-ip
 ```
