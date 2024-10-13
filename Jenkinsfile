@@ -102,8 +102,13 @@ pipeline {
             steps {
                 script {
                     // SSH into the target EC2 instance and apply the deployment
+
                     sh """
                     ssh -o StrictHostKeyChecking=no -i ${TARGET_KEY} ubuntu@${TARGET_EC2_IP} "kubectl apply -f /home/ubuntu/dns_resolver_deployment.yaml"
+                    """
+
+                    sh """
+                    ssh -o StrictHostKeyChecking=no -i ${TARGET_KEY} ubuntu@${TARGET_EC2_IP} "kubectl rollout status deployment/dns-resolver"
                     """
                 }
             }
