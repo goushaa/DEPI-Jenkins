@@ -54,7 +54,7 @@ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
    - For `SCM`, choose `Git`.
    - Enter the repository URL: `https://github.com/goushaa/DEPI-Jenkins.git`.
    - Set the branch to `*/main`.
-   - Check the option of `GitHub hook trigger for GITScm polling`.
+   - Check the option of `GitHub hook trigger for GITScm polling`. (It also has to be configured in github repo itself to push to this jenkins host)
    - Click `Save` to create the job.
 
 ## Jenkinsfile Explanation
