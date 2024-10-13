@@ -15,6 +15,7 @@ Inside the EC2 instance, run:
     sudo mkdir -p /var/lib/jenkins/.ssh/
     sudo mv /home/ubuntu/k3sPair.pem /var/lib/jenkins/.ssh/
 ```
+Note: Manually create `k3sPair.pem` in the console and save it in a secure place
 
 2. **Retrieve the Jenkins initial admin password:**
 ```bash
